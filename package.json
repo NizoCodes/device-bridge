@@ -6,7 +6,11 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
-    "simulate": "node tools/simulate.js"
+    "simulate": "node tools/simulate.js",
+    "start:production": "pm2 start ecosystem.config.js && pm2 save",
+    "restart:production": "pm2 restart device-bridge && pm2 save",
+    "stop:production": "pm2 stop device-bridge",
+    "logs": "pm2 logs device-bridge"
   },
   "engines": {
     "node": ">=18"

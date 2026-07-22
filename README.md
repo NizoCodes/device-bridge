@@ -59,8 +59,13 @@ save the raw message under `logs/<machine>/`.
 ## Deploy (offline LAN server)
 
 ```bash
-pm2 start ecosystem.config.js && pm2 save
+npm run start:production     # pm2 start ecosystem.config.js && pm2 save
+npm run logs                 # pm2 logs device-bridge
+npm run restart:production   # after editing config/profile
+npm run stop:production
 ```
+
+(First time on a box: `npm install -g pm2` and `pm2 startup` to enable boot-start.)
 
 Firewall port `9100` to the LAN only. The bridge talks TCP directly to the
 analyzer — it is **not** fronted by Apache.
