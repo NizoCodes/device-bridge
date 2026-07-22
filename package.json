@@ -1,0 +1,16 @@
+{
+  "name": "device-bridge",
+  "version": "0.1.0",
+  "description": "NizoMed EHR lab device integration bridge — receives HL7 results from lab analyzers over MLLP/TCP, ACKs them, parses the message, and (Phase 3) forwards results to ehr-servers keyed by accession/Sample ID.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "simulate": "node tools/simulate.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {}
+}

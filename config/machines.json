@@ -1,0 +1,11 @@
+{
+  "machines": [
+    {
+      "name": "genrui-kt6610-lab1",
+      "model": "genrui-kt6610",
+      "listenPort": 9100,
+      "enabled": true,
+      "note": "Genrui KT-6610 Auto Hematology Analyzer (CBC). Set the analyzer's LIS IP to this server's LAN IP and LIS port to listenPort. Comm. Protocol = HL7, enable Auto Comm + ACK."
+    }
+  ]
+}
