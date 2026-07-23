@@ -71,8 +71,14 @@ function handleMessage(machine, message) {
   log.info(`[${machine.name}] Sample ID candidates:`, JSON.stringify(parsed.sampleIdCandidates));
   if (obsCount) {
     for (const o of parsed.observations) {
+      // ED = encapsulated data (histogram/scattergram bitmaps) — don't dump the
+      // multi-KB blob into the logs; just note its presence.
+      const shown =
+        o.valueType === "ED" || String(o.value).length > 40
+          ? `<${o.valueType || "binary"} ${String(o.value).length} bytes>`
+          : o.value;
       log.info(
-        `    ${o.code.padEnd(8)} = ${String(o.value).padEnd(10)} ${o.units}` +
+        `    ${(o.code || "?").padEnd(10)} = ${String(shown).padEnd(12)} ${o.units}` +
           `${o.abnormalFlag ? `  [${o.abnormalFlag}]` : ""}` +
           `${o.referenceRange ? `  (ref ${o.referenceRange})` : ""}`
       );
