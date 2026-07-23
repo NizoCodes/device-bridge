@@ -17,11 +17,14 @@ const path = require("path");
 const { MllpParser, frame } = require("./lib/mllp");
 const hl7 = require("./lib/hl7");
 const log = require("./lib/logger");
+const { forwardResults } = require("./lib/forward");
 
 loadDotEnv();
 
 const ACK_APP = process.env.ACK_APP || "NIZOMED_EHR";
 const ACK_FACILITY = process.env.ACK_FACILITY || "LAB";
+const EHR_INGEST_URL = process.env.EHR_INGEST_URL || ""; // empty = log-only (no forward)
+const SECURITY_KEY = process.env.SECURITY_KEY || "";
 
 function loadDotEnv() {
   // Tiny zero-dependency .env loader (avoids needing `npm install` on an
@@ -101,9 +104,16 @@ function startListener(machine) {
     socket.on("data", (chunk) => {
       parser.push(chunk, (message) => {
         const parsed = handleMessage(machine, message);
-        // Always ACK so the analyzer does not retry / error out.
+        // Always ACK FIRST so the analyzer marks the transmission successful and
+        // does not retry — regardless of what happens downstream.
         const ack = hl7.buildAck(parsed || {}, { app: ACK_APP, facility: ACK_FACILITY });
         socket.write(frame(ack));
+        // Then forward to the EHR (best-effort). Log-only if EHR_INGEST_URL unset.
+        if (parsed && EHR_INGEST_URL) {
+          forwardResults({ url: EHR_INGEST_URL, securityKey: SECURITY_KEY, model: machine.model, parsed, profile })
+            .then((r) => log.info(`[${machine.name}] ingest → ${r.status} ${JSON.stringify(r.body)}`))
+            .catch((err) => log.warn(`[${machine.name}] ingest failed:`, err.message));
+        }
       });
     });
 
