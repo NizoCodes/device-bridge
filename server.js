@@ -110,7 +110,7 @@ function startListener(machine) {
         socket.write(frame(ack));
         // Then forward to the EHR (best-effort). Log-only if EHR_INGEST_URL unset.
         if (parsed && EHR_INGEST_URL) {
-          forwardResults({ url: EHR_INGEST_URL, securityKey: SECURITY_KEY, model: machine.model, parsed, profile })
+          forwardResults({ url: EHR_INGEST_URL, securityKey: SECURITY_KEY, model: machine.model, machineName: machine.name, parsed, profile })
             .then((r) => log.info(`[${machine.name}] ingest → ${r.status} ${JSON.stringify(r.body)}`))
             .catch((err) => log.warn(`[${machine.name}] ingest failed:`, err.message));
         }
