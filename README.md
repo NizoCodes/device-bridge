@@ -5,7 +5,9 @@ results as **HL7 v2 over MLLP/TCP**; the EHR is not itself a LIS, so this bridge
 plays the LIS role: it listens on the LAN, ACKs the machine, parses the message,
 and (Phase 3) forwards results to `ehr-servers` keyed by the **accession / Sample
 ID**. Closes NHIF findings **#1** (lab device integration) and **#7** (direct
-results transmission). See `../ehr/docs/nhif-lab-device-integration-plan.md`.
+results transmission). Full developer reference:
+`../ehr/docs/lab-device-integration.md` (as-built) and
+`../ehr/docs/nhif-lab-device-integration-plan.md` (original plan).
 
 Zero npm dependencies — runs on plain Node ≥ 18, so no `npm install` is needed on
 an offline LAN server.
